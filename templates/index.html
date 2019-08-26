@@ -1,0 +1,48 @@
+<!-- index.html -->
+<!DOCTYPE html>
+  <head>
+    <meta charset="UTF-8">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
+    <script type=text/javascript src="{{ url_for('static', filename='jquery-3.4.1.js') }}"></script>
+    <script type=text/javascript src="{{ url_for('static', filename='test.js') }}"></script>
+  </head>
+  <h1>Life-Log</h1>
+  プロフィール情報
+    <table border="1" width="400">
+        <tr>
+          <td>ユーザ</td>
+          <td>メール</td>
+          <td>パスワード</td>
+        </tr>
+        <tr>
+          <td>データ(ユーザ)</td>
+          <td>データ(メール)</td>
+          <td>データ(パスワード)</td>
+        </tr>
+      </table>
+      <form name="select">
+      <select name=”data”>
+      <option value=”1”>選択肢1</option>
+      <option value=”2”>選択肢2</option>
+      <option value=”3”>選択肢3</option>
+      <option value=”4”>選択肢4</option>
+      <option value=”5”>選択肢5</option>
+      </select>
+      </form>
+      <button type="button" onChange="">Go</button>
+    <br>→なんかグラフが表示される
+    <br>fitbit データ
+    <table border="1" width="300">
+        <tr>
+          <td>心拍数</td>
+          <td>歩数</td>
+          <td>睡眠時間</td>
+        </tr>
+        <tr>
+          <td>データ(心拍)</td>
+          <td>データ(歩数)</td>
+          <td>データ(睡眠)</td>
+        </tr>
+    </table>
+  </body>
+</html>
