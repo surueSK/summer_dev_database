@@ -53,10 +53,40 @@ function fill_profile(){
 function fill_data(){
   //get selected data key
   var key = document.getElementById('selection').value;
+  var num = data[key].length
+
+  //generate graph
+  var canvas = document.getElementById("graph");
+  var ctx = canvas.getContext("2d");
+  var margin1 = 30;
+  var margin2 = 10;
+  ctx.moveTo(margin1, margin2);
+  ctx.lineTo(margin1, canvas.height - margin1);
+  ctx.lineTo(canvas.width - margin2, canvas.height - margin1);
+  for (var i=0; i<num; i++){
+    ctx.moveTo(margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * i, canvas.height - margin1);
+    ctx.lineTo(margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * i, canvas.height - margin1 + margin2);
+  }
+  var max_range = Math.ceil(
+    data[key].reduce(
+      function (a, b) {
+        return Math.max(a, b);
+      }
+    )
+  );
+  for (var i=0; i<=max_range; i++){
+    ctx.moveTo(margin1, canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * i);
+    ctx.lineTo(margin1 - margin2, canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * i);
+  }
+  for (var i=1; i<num; i++){
+    ctx.moveTo(margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * (i-1), canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * data[key][i-1]);
+    ctx.lineTo(margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * i, canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * data[key][i]);
+  }
+  ctx.stroke();
 
   //generate table
   var data_table = "<tr>";
-  for (var i=0; i<data[key].length; i++){
+  for (var i=0; i<num; i++){
     data_table += "<td>" + data[key][i] + "</td>";
   }
   data_table += "</tr>"
