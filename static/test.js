@@ -56,17 +56,25 @@ function fill_data(){
   var num = data[key].length
 
   //generate graph
+  //setting canvas
   var canvas = document.getElementById("graph");
   var ctx = canvas.getContext("2d");
+  //setting margin and empty default positions
   var margin1 = 30;
   var margin2 = 10;
+  var x_pos;
+  var y_pos;
+  //x and y axis
   ctx.moveTo(margin1, margin2);
   ctx.lineTo(margin1, canvas.height - margin1);
   ctx.lineTo(canvas.width - margin2, canvas.height - margin1);
+  //x axis labels
   for (var i=0; i<num; i++){
-    ctx.moveTo(margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * i, canvas.height - margin1);
-    ctx.lineTo(margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * i, canvas.height - margin1 + margin2);
+    x_pos = margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * i
+    ctx.moveTo(x_pos, canvas.height - margin1);
+    ctx.lineTo(x_pos, canvas.height - margin1 + margin2);
   }
+  //rounded maximum value of data
   var max_range = Math.ceil(
     data[key].reduce(
       function (a, b) {
@@ -74,13 +82,20 @@ function fill_data(){
       }
     )
   );
+  //y axis labels
   for (var i=0; i<=max_range; i++){
-    ctx.moveTo(margin1, canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * i);
-    ctx.lineTo(margin1 - margin2, canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * i);
+    y_pos = canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * i
+    ctx.moveTo(margin1, y_pos);
+    ctx.lineTo(margin1 - margin2, y_pos);
   }
+  //plot data to corresponding positions
+  x_pos = margin1 + margin2;
+  y_pos = canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * data[key][0];
+  ctx.moveTo(x_pos, y_pos);
   for (var i=1; i<num; i++){
-    ctx.moveTo(margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * (i-1), canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * data[key][i-1]);
-    ctx.lineTo(margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * i, canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * data[key][i]);
+    x_pos = margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * i;
+    y_pos = canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * data[key][i];
+    ctx.lineTo(x_pos, y_pos);
   }
   ctx.stroke();
 
