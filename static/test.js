@@ -59,20 +59,26 @@ function fill_data(){
   //setting canvas
   var canvas = document.getElementById("graph");
   var ctx = canvas.getContext("2d");
-  //setting margin and empty default positions
+  //clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.beginPath();
+  //setting margin, empty default positions, and stroke color
   var margin1 = 30;
   var margin2 = 10;
   var x_pos;
   var y_pos;
+  ctx.strokeStyle = "black";
   //x and y axis
   ctx.moveTo(margin1, margin2);
   ctx.lineTo(margin1, canvas.height - margin1);
   ctx.lineTo(canvas.width - margin2, canvas.height - margin1);
+  ctx.stroke();
   //x axis labels
   for (var i=0; i<num; i++){
     x_pos = margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * i
     ctx.moveTo(x_pos, canvas.height - margin1);
     ctx.lineTo(x_pos, canvas.height - margin1 + margin2);
+    ctx.stroke();
   }
   //rounded maximum value of data
   var max_range = Math.ceil(
@@ -87,6 +93,7 @@ function fill_data(){
     y_pos = canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * i
     ctx.moveTo(margin1, y_pos);
     ctx.lineTo(margin1 - margin2, y_pos);
+    ctx.stroke();
   }
   //plot data to corresponding positions
   x_pos = margin1 + margin2;
