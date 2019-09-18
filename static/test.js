@@ -1,14 +1,8 @@
 var data = {
-  Data1: [3, 27, 12, 15, 8],
-  Data2: [23, 33, 4, 5, 8],
-  Data3: [5, 7, 82, 12, 6]
+  Data1: [3, 27, 12, 15, 8, 7, 2, 5, 22, 128, 57, 83, 12, 35, 43, 2, 4, 45, 2, 1, 0, 99, 65, 33],
+  Data2: [2, 3, 4, 5, 8],
+  Data3: [5, 7, 82, 12, 6, 5]
 };
-
-// function selectCheck()
-// {
-//   var data = document.select.data.value;
-//   alert(data);
-// }
 
 function fill_profile(){
   //obtain user name from HTML
@@ -55,58 +49,85 @@ function fill_data(){
   var key = document.getElementById('selection').value;
   var num = data[key].length
 
-  //generate graph
+  /*
+  Generate graph
+  */
   //setting canvas
   var canvas = document.getElementById("graph");
   var ctx = canvas.getContext("2d");
+  ctx.font = "11px thin Arial";
+
   //clear canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.beginPath();
+
   //setting margin, empty default positions, and stroke color
   var margin1 = 30;
   var margin2 = 10;
   var x_pos;
   var y_pos;
   ctx.strokeStyle = "black";
+
   //x and y axis
   ctx.moveTo(margin1, margin2);
   ctx.lineTo(margin1, canvas.height - margin1);
   ctx.lineTo(canvas.width - margin2, canvas.height - margin1);
   ctx.stroke();
+
+  /* x axis */
+  //obtain maximum instances of data
+  var max_range_x = num;
+  var interval_rate_x;
+
+  //calculate interval and new max_range for x axis
+  [max_range_x, interval_rate_x] = calculate_interval(max_range_x-1);
+
   //x axis labels
-  for (var i=0; i<num; i++){
-    x_pos = margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * i
+  for (var i=0; i<=max_range_x; i+=interval_rate_x){
+    x_pos = margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / max_range_x * i;
     ctx.moveTo(x_pos, canvas.height - margin1);
     ctx.lineTo(x_pos, canvas.height - margin1 + margin2);
     ctx.stroke();
+    ctx.fillText(i, x_pos, canvas.height - margin1 + margin2 + 20);
   }
+
+  /* y axis */
   //rounded maximum value of data
-  var max_range = Math.ceil(
+  var max_range_y = Math.ceil(
     data[key].reduce(
       function (a, b) {
         return Math.max(a, b);
       }
     )
   );
+  var interval_rate_y;
+
+  //calculate interval and new max_range for y axis
+  [max_range_y, interval_rate_y] = calculate_interval(max_range_y);
+
   //y axis labels
-  for (var i=0; i<=max_range; i++){
-    y_pos = canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * i
+  for (var i=0; i<=max_range_y; i+=interval_rate_y){
+    y_pos = canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range_y * i
     ctx.moveTo(margin1, y_pos);
     ctx.lineTo(margin1 - margin2, y_pos);
     ctx.stroke();
+    ctx.fillText(i, margin1 - margin2 - 20, y_pos);
   }
+
   //plot data to corresponding positions
   x_pos = margin1 + margin2;
-  y_pos = canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * data[key][0];
+  y_pos = canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range_y * data[key][0];
   ctx.moveTo(x_pos, y_pos);
   for (var i=1; i<num; i++){
-    x_pos = margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / (num-1) * i;
-    y_pos = canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range * data[key][i];
+    x_pos = margin1 + margin2 + (canvas.width - margin1 - margin2 * 3) / max_range_x * i;
+    y_pos = canvas.height - margin1 - margin2 - (canvas.height - margin1 - margin2 * 3) / max_range_y * data[key][i];
     ctx.lineTo(x_pos, y_pos);
   }
   ctx.stroke();
 
-  //generate table
+  /*
+  Generate table
+  */
   var data_table = "<tr>";
   for (var i=0; i<num; i++){
     data_table += "<td>" + data[key][i] + "</td>";
@@ -115,4 +136,20 @@ function fill_data(){
 
   //change innerHTML
   document.getElementById('data').innerHTML = data_table;
+}
+
+function calculate_interval(_max){
+  var _interval = 1;
+  while (_max / _interval > 10){
+    if (_interval == 1){
+      _interval = 5;
+    }
+    else if (_interval == 5){
+      _interval = 10;
+    }
+    else{
+      _interval += 10;
+    }
+  }
+  return [Math.ceil(_max / _interval) * _interval, _interval];
 }
