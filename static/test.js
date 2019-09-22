@@ -4,19 +4,25 @@ var data = {
   Data3: [5, 7, 82, 12, 6, 5]
 };
 
+//ーーーー編集1 グローバルとして先に定義ーーーー
+var selection;
+var profile_data = {};
+var profile_table;
+//ーーーー編集1終了ーーーー
+
 function fill_profile(){
   //obtain user name from HTML
   var user = document.getElementById('user').value;
 
   //fetch profile row vector from database
-  var profile_data = {
+  profile_data = {
     Name: "John Lime",
     Mail: "johnlime@mail.com",
     Password: "password"
   };
 
   //get keys from profile vector and generate table
-  var profile_table = "<tr>"
+  profile_table = "<tr>"
   for (var key in profile_data){
     profile_table += "<td>" + key + "</td>";
   }
@@ -36,13 +42,46 @@ function fill_profile(){
   data;
 
   //generate form/select and button
-  var selection = "<form name=\"select\">" + "<select name=\"data\" id=\"selection\">";
+    selection = "<form name=\"select\">" + "<select name=\"data\" id=\"selection\">";
   for (var key in data){
     selection += "<option value=\"" + key + "\">" + key + "</option>";
   }
   selection += "</select></form><button type=\"button\" onclick=\"fill_data()\">Go</button>";
   document.getElementById('data_select').innerHTML = selection;
 }
+
+//ーーーー編集部2 プロフィール関連ーーーー
+//プロフィール変更フォーム
+function profile_edit(){
+  var form2 = "<form name=\"frm2\">";
+  form2 += "<br>Name：<input type=\"text\" name=\"name\">";
+  form2 += "<br>Mail：<input type=\"mail\"name=\"mail\">";
+  form2 += "<br>Password：<input type=\"text\"name=\"password\">";
+  form2 += "<br><button type=\"button\" onclick=\"rename()\">OK</button>";
+  document.getElementById('profile_change').innerHTML = form2;
+}
+//値の変化
+function rename(){
+  profile_data.Name = document.frm2.name.value;
+  profile_data.Mail = document.frm2.mail.value;
+  profile_data.Password = document.frm2.password.value;
+  profile_table = "<tr>"
+  for (var key in profile_data){
+    profile_table += "<td>" + key + "</td>";
+  }
+  profile_table += "</tr>"
+
+  //get data from profile vector and generate table
+  profile_table += "<tr>"
+  for (var key in profile_data){
+    profile_table += "<td>" + profile_data[key] + "</td>";
+  }
+  profile_table += "</tr>"
+
+  //generate table
+  document.getElementById('profile').innerHTML = profile_table;
+}
+//ーーーー編集2終了ーーーー
 
 function fill_data(){
   //get selected data key
