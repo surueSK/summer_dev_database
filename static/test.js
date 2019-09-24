@@ -47,6 +47,7 @@ function fill_profile(){
     selection += "<option value=\"" + key + "\">" + key + "</option>";
   }
   selection += "</select></form><button type=\"button\" onclick=\"fill_data()\">Go</button>";
+  selection += "</select></form><button type=\"button\" onclick=\"profile_edit()\">プロフィール変更</button>";
   document.getElementById('data_select').innerHTML = selection;
 }
 
